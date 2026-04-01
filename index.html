@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Beentoo — 聖地巡禮地圖｜影視、動漫、K-pop 景點收藏</title>
+  <meta name="description" content="Beentoo 收錄全球上百個 K-pop、動漫、影視聖地景點，透過對照相機還原經典場景，踩點現場打卡你的旅行足跡，在同一個座標，遇見影視作品與現實交織的瞬間。免費使用。" />
+  <meta property="og:title" content="Beentoo — 聖地巡禮地圖" />
+  <meta property="og:description" content="收錄全球上百個影視、動漫、K-pop 聖地景點，現場打卡留下你的旅行足跡" />
+  <meta property="og:url" content="https://beentoomap.github.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://beentoomap.github.io" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:    #D4637A;
+      --peach:   #FFCBA4;
+      --cream:   #FDF8F5;
+      --gold:    #B8860B;
+      --text:    #2C2824;
+      --muted:   #7A7570;
+      --border:  rgba(0,0,0,0.07);
+      --grad:    linear-gradient(135deg, #FFB7C5 0%, #FFCBA4 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,248,245,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 18px; color: var(--text);
+    }
+    .nav-logo img {
+      width: 34px; height: 34px; border-radius: 50%; object-fit: cover;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--grad);
+      color: #fff;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 700; font-size: 14px;
+      border: none; cursor: pointer;
+      border-radius: 9999px;
+      padding: 10px 22px;
+      transition: opacity .18s, transform .18s;
+      box-shadow: 0 4px 14px rgba(212,99,122,.28);
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); opacity: 1; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; overflow: hidden;
+      background: var(--grad);
+      padding: 96px 24px 112px;
+      text-align: center;
+    }
+    .hero-blur {
+      position: absolute; border-radius: 50%;
+      filter: blur(72px); pointer-events: none;
+    }
+    .hero-blur-1 { width: 300px; height: 300px; background: rgba(255,255,255,.35); top: -80px; left: -80px; }
+    .hero-blur-2 { width: 280px; height: 280px; background: rgba(255,255,255,.25); bottom: -80px; right: -60px; }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 9999px;
+      padding: 5px 14px;
+      font-size: 12px; font-weight: 600; color: var(--pink);
+      margin-bottom: 24px;
+      backdrop-filter: blur(6px);
+    }
+    .hero h1 {
+      font-size: clamp(30px, 6vw, 52px);
+      font-weight: 800; line-height: 1.18;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(180,80,100,.18);
+      margin-bottom: 18px;
+    }
+    .hero p {
+      font-size: clamp(15px, 2.5vw, 18px);
+      color: rgba(255,255,255,.88);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.6);
+      color: var(--pink);
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 600; font-size: 14px;
+      border: 1.5px solid rgba(255,255,255,.7);
+      cursor: pointer; border-radius: 9999px;
+      padding: 10px 22px;
+      backdrop-filter: blur(6px);
+      transition: background .18s, transform .18s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.85); transform: translateY(-1px); }
+
+    /* ── FEATURES ── */
+    .section { max-width: 1080px; margin: 0 auto; padding: 80px 24px; }
+    .section-title {
+      font-size: clamp(20px, 4vw, 28px); font-weight: 800;
+      text-align: center; margin-bottom: 48px; color: var(--text);
+    }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .feature-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px 28px;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .feature-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.08); transform: translateY(-3px); }
+    .feature-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #FFF0F4, #FFF5EB);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+    .feature-title { font-size: 17px; font-weight: 700; color: var(--text); }
+    .feature-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+    /* ── SPOTS ── */
+    .spots-bg { background: #fff; }
+    .spots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .spot-card {
+      border-radius: 18px; overflow: hidden;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      transition: box-shadow .2s, transform .2s;
+      cursor: default;
+    }
+    .spot-card:hover { box-shadow: 0 10px 32px rgba(0,0,0,.1); transform: translateY(-4px); }
+    .spot-img-wrap { position: relative; height: 200px; overflow: hidden; background: #f0ede8; }
+    .spot-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s ease;
+    }
+    .spot-card:hover .spot-img-wrap img { transform: scale(1.06); }
+    .spot-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: #FFE8A3; color: #7A5C00;
+      font-weight: 700; font-size: 11px;
+      padding: 3px 9px; border-radius: 9999px;
+    }
+    .spot-tag {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(255,255,255,.88);
+      color: var(--pink);
+      font-weight: 600; font-size: 11px;
+      padding: 3px 9px; border-radius: 9999px;
+      backdrop-filter: blur(4px);
+    }
+    .spot-info { padding: 14px 16px 16px; }
+    .spot-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.35; }
+    .spot-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .spot-subject { font-size: 12px; font-weight: 600; color: var(--pink); }
+    .spot-city { font-size: 12px; color: var(--muted); }
+    .spot-dot { width: 3px; height: 3px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
+
+    /* ── STATS ── */
+    .stats-strip {
+      background: var(--grad);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .stats-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
+    .stat { color: #fff; }
+    .stat-num { font-size: 40px; font-weight: 800; line-height: 1; }
+    .stat-label { font-size: 13px; opacity: .85; margin-top: 4px; }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 88px 24px;
+      text-align: center;
+    }
+    .cta-section h2 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; margin-bottom: 14px; }
+    .cta-section p { font-size: 15px; color: var(--muted); margin-bottom: 32px; line-height: 1.7; }
+    .btn-large {
+      font-size: 16px; padding: 14px 36px;
+      box-shadow: 0 6px 20px rgba(212,99,122,.32);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 12.5px; color: var(--muted);
+    }
+    footer a { color: var(--pink); font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── SCROLL FADE-IN ── */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero { padding: 72px 20px 88px; }
+      .stats-inner { gap: 32px; }
+      .stat-num { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="https://jovfsrrarkpaocdxrxvh.supabase.co/storage/v1/object/public/spot-photos/beentoo_logo.png" alt="Beentoo logo" />
+    Beentoo
+  </div>
+  <a href="https://beentoo.lovable.app" class="btn-primary">
+    開啟 App
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blur hero-blur-1"></div>
+  <div class="hero-blur hero-blur-2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      K-pop・動漫・影視聖地巡禮地圖
+    </div>
+    <h1>在同一個座標，<br />遇見不同時空的感動</h1>
+    <p>Beentoo 帶你走訪影視、動漫、K-pop 聖地，<br />用對照相機還原經典場景，踩點留下你的旅行足跡。</p>
+    <div class="hero-cta">
+      <a href="https://beentoo.lovable.app" class="btn-primary btn-large">
+        開始探索
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a href="#spots" class="btn-ghost">瀏覽景點</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="section fade-in">
+  <h2 class="section-title">三個步驟，開始你的巡禮旅程</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📍</div>
+      <div class="feature-title">探索聖地</div>
+      <div class="feature-desc">瀏覽全球影視、動漫、K-pop 聖地巡禮景點，找到你心目中的經典場景。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📷</div>
+      <div class="feature-title">現場打卡</div>
+      <div class="feature-desc">透過對照相機還原經典畫面，在真實世界與偶像共享同一片風景。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔖</div>
+      <div class="feature-title">收藏計畫</div>
+      <div class="feature-desc">收藏想去的景點，規劃你的專屬巡禮路線，打造個人旅行記憶牆。</div>
+    </div>
+  </div>
+</div>
+
+<!-- SPOTS -->
+<div class="spots-bg">
+  <div class="section" id="spots">
+    <h2 class="section-title fade-in">熱門聖地景點</h2>
+    <div class="spots-grid">
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80" alt="鎌倉高校前踏切" loading="lazy" />
+          <span class="spot-tag">動漫</span>
+          <span class="spot-badge">+50 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">鎌倉高校前踏切</div>
+          <div class="spot-meta">
+            <span class="spot-subject">灌籃高手</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇯🇵 鎌倉</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80" alt="須賀神社石階" loading="lazy" />
+          <span class="spot-tag">動漫</span>
+          <span class="spot-badge">+80 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">須賀神社石階</div>
+          <div class="spot-meta">
+            <span class="spot-subject">你的名字</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇯🇵 東京</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1538485399081-7c8272e9ef19?w=600&q=80" alt="N首爾塔" loading="lazy" />
+          <span class="spot-tag">K-pop</span>
+          <span class="spot-badge">+30 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">N 首爾塔</div>
+          <div class="spot-meta">
+            <span class="spot-subject">BTS・多部作品</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇰🇷 首爾</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1583224773898-d6e4c3e20f6a?w=600&q=80" alt="南怡島" loading="lazy" />
+          <span class="spot-tag">影視</span>
+          <span class="spot-badge">+50 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">南怡島</div>
+          <div class="spot-meta">
+            <span class="spot-subject">冬季戀歌</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇰🇷 加平</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600&q=80" alt="秋葉原" loading="lazy" />
+          <span class="spot-tag">動漫</span>
+          <span class="spot-badge">+50 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">秋葉原 Radio Kaikan</div>
+          <div class="spot-meta">
+            <span class="spot-subject">Steins;Gate</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇯🇵 東京</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&q=80" alt="釜山海雲台" loading="lazy" />
+          <span class="spot-tag">影視</span>
+          <span class="spot-badge">+30 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">海雲台海水浴場</div>
+          <div class="spot-meta">
+            <span class="spot-subject">屍速列車・多部作品</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇰🇷 釜山</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=600&q=80" alt="漢江公園" loading="lazy" />
+          <span class="spot-tag">K-pop</span>
+          <span class="spot-badge">+30 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">漢江公園 뚝섬</div>
+          <div class="spot-meta">
+            <span class="spot-subject">NewJeans・IVE</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇰🇷 首爾</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=600&q=80" alt="大阪道頓堀" loading="lazy" />
+          <span class="spot-tag">動漫</span>
+          <span class="spot-badge">+50 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">道頓堀グリコサイン</div>
+          <div class="spot-meta">
+            <span class="spot-subject">多部動漫・影視</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇯🇵 大阪</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spot-card fade-in">
+        <div class="spot-img-wrap">
+          <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80" alt="東京鐵塔" loading="lazy" />
+          <span class="spot-tag">影視</span>
+          <span class="spot-badge">+30 pts</span>
+        </div>
+        <div class="spot-info">
+          <div class="spot-name">東京鐵塔周邊</div>
+          <div class="spot-meta">
+            <span class="spot-subject">東京愛情故事・多部</span>
+            <span class="spot-dot"></span>
+            <span class="spot-city">🇯🇵 東京</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip fade-in">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num">200+</div>
+      <div class="stat-label">收錄景點</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8+</div>
+      <div class="stat-label">涵蓋國家</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-label">景點類型</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">免費</div>
+      <div class="stat-label">完全免費使用</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<section class="cta-section fade-in">
+  <h2>準備好出發了嗎？</h2>
+  <p>立即開啟 Beentoo，找到你最愛作品的經典場景，<br />踩點留下屬於你的旅行記憶。</p>
+  <a href="https://beentoo.lovable.app" class="btn-primary btn-large">
+    開始探索
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Beentoo．<a href="https://beentoo.lovable.app">beentoo.lovable.app</a></p>
+  <p style="margin-top:6px; font-size:11px; color:#aaa;">景點縮圖來源：Unsplash，僅供展示用途。</p>
+</footer>
+
+<script>
+  // Scroll fade-in using IntersectionObserver
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // Stagger children inside grids
+        const delay = entry.target.closest('.features-grid, .spots-grid')
+          ? Array.from(entry.target.parentElement.children).indexOf(entry.target) * 80
+          : 0;
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
